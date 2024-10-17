@@ -1,0 +1,12 @@
+---
+title: "Counts"
+author: "Prathishta"
+date: 07-10-2024
+description: ""
+---
+
+## Introduction
+
+I will be exploring dataset on banned books by counting categories like the number of bans, type of bans,etc.
+
+## Count Banned Book by stat

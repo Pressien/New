@@ -1,0 +1,32 @@
+project:
+  type: website
+
+website:
+  title: "Pressie Blog"
+output-dir: "_site"
+  navbar:
+    right:
+      - text: "Home"
+        href: posts/welcome/Home.html
+      - text: "A1"
+        menu:
+          - text: "Counts Analysis"
+            href: posts/A1/counts.html
+          - text: "Code Replication"
+            href: posts/A1/code-replication.html
+      - text: "A2"
+        menu:
+          - text: "Dataset 1"
+            href: posts/A2/Dataset1.html
+          - text: "Dataset 2"
+            href: posts/A2/Dataset2.html
+          - text: "Dataset 3"
+            href: posts/A2/Dataset3.html
+
+# Optional settings
+format:
+  html:
+    self-contained: true  # Generates a single HTML file (optional)
+    css: styles.css  # Optional CSS file for custom styling
+
+# Additional configurations can go here if needed

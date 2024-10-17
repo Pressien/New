@@ -1,0 +1,26 @@
+project:
+  type: website
+
+website:
+  title: "Pressie Blog"
+  navbar:
+    right:
+     
+      - text: "Home"
+        href: posts/welcome/Home.qmd
+      - text: "A1"
+        menu:
+          - text: "Counts Analysis"
+            href: posts/A1/counts.qmd
+          - text: "Code Replication"
+            href: posts/A1/code-replication.qmd
+      - text: "A2"
+        menu:
+          - text: "Dataset 1"
+            href: posts/A2/Dataset1.qmd
+          - text: "Dataset 2"
+            href: posts/A2/Dataset2.qmd
+          - text: "Dataset 3"
+            href: posts/A2/Dataset3.qmd
+
+

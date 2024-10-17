@@ -1,0 +1,149 @@
+---
+title: "Dataset 3 Analysis"
+author: "Prathishta"
+date: "2024-10-17"
+description: "Children's games dataset"
+---
+
+## Analysis of Types of games the Children prefer.
+
+## 1. Setting up R Packages
+
+Installing and loading necessary packages
+
+```{r}
+
+#loading packages
+library(tidyverse)
+library(openintro)
+
+#Loading dataset
+data("children_gender_stereo")
+
+# Extracting the third study data
+games3 <- children_gender_stereo[[3]]
+```
+
+## 2. Introduction
+
+This is an analysis of data from a study on children interest in different types of games across gender and age.
+
+```{r}
+library(openintro)
+data("children_gender_stereo")
+glimpse(children_gender_stereo)
+```
+
+```{r}
+## Choosing, arbitrarily, the third game/third study
+children_gender_stereo[[3]] -> games3
+glimpse(games3)
+```
+
+## 3. Data Dictionary
+
+Quantitative Variable
+
+-   age: Age of the child in years (6 or 7)
+
+-   interest: Measure of interest in playing the game (difference from baseline)
+
+-   difference
+
+-   stereotype
+
+Qualitative Variable
+
+-   subject: Unique identifier for each child
+
+-   gender: Gender of the child (male or female)
+
+-   game: Type of game (smart or try hard)
+
+    Observation:
+
+    The dataset contains 128 observations, each representing a child's response to a game.
+
+    ## 4. Target and Predictor Variables
+
+    -   Target Variable: interest (measure of interest in playing the game)
+
+    -   Predictor Variables: age, gender, game
+
+    ## 5. Research Experiment
+
+    The researchers likely conducted an experiment by
+
+    1.  Recruited 128 children aged 6-7 years old, balanced across genders.
+
+    2.  Presented two types of games to the children: a "smart" game and a "Try hard" game.
+
+    3.  Measured each child's baseline interest in games.
+
+    4.  Had the children play or learn about each game type.
+
+    5.  Measured the change in interest for each game compared to the baseline.
+
+    ## 6. Research Questions
+
+    The analysis aims to answer:
+
+    1.  How does interest in different game types vary by gender?
+
+    2.  How does age (6 vs 7 years) affect interest in different game types?
+
+    3.  Are there gender differences in game preferences at these ages?
+
+    ## 7. Preproccesing and Visualization
+
+    ```{r}
+    games_processed <- games3 %>%
+      group_by(age, gender, game) %>%
+      summarise(avg_interest = mean(interest, na.rm = TRUE), .groups = "drop") %>%
+      ungroup()
+    ##Grouping the data by age, gender, and game type.
+    ##Calculating mean interest for each group
+    ##Ungrouping data for further analysis.
+    ```
+
+```{r}
+ggplot(games_processed, aes(x = factor(age), y = avg_interest, fill = gender)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~game) +
+  labs(title = "Interest in Play across Gender and Game Type",
+       subtitle = "Difference from Baseline",
+       x = "Age in Years",
+       y = "Average Percentage Interest in Playing Game",
+       caption = "Bian et al., Science 355, 389-391 (2017) 27 January 2017") +
+  scale_fill_manual(values = c("female" = "#FF9999", "male" = "#66C2A5")) +
+  theme_minimal() +
+  theme(legend.title = element_blank(),
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+```
+
+## 8. Inference and Storytelling
+
+Based on the graph, we can draw several insights:
+
+1.  Gender differences:
+    -   For the "Smart Game", boys show more interest than girls at both ages.
+
+    -   For the "Try Hard Game", the gender difference is less pronounced.
+
+<!-- -->
+
+2.  Age effects:
+    -   For both genders, interest in the "Smart Game" increases from age 6 to 7.
+
+    -   Interest in the "Try Hard Game" decreases slightly for both genders from 6 to 7.
+
+<!-- -->
+
+3.  Game type preferences:
+
+    -   Boys show a stronger preference for the "Smart Game" compared to girls.
+
+    -   Girls show a slight preference for the "Try Hard Game" at age 6, but this reverses at age 7.
+
+4.  This data analysis suggests that gender stereotypes about intellectual ability may begin to influence children's interests at the age of 6-7. The stronger male preference for the "Smart Game" could indicate that boys are more likely to engage with activities labeled as requiring intelligence, potentially due to societal stereotypes. The shift in girls' preferences from age 6 to 7 might suggest an emerging awareness of these stereotypes.

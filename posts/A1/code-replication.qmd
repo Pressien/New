@@ -1,0 +1,6 @@
+---
+title: "Code Replication"
+author: "Prathishta"
+date: "2024-10-17"
+description: "Analysis and replication of statistical methods."
+---

@@ -1,0 +1,177 @@
+---
+title: "Dataset 1 Analysis"
+author: "Prathishta"
+date: "2024-10-17"
+description: "Valentine's day Expense"
+---
+
+# Analysis of Valentine's day spending.
+
+## 1.Setting up R Packages
+
+loading the required packages:
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+library(ggprism)
+```
+
+```{r}
+# https://stackoverflow.com/questions/74491138/ggplot-custom-fonts-not-working-in-quarto
+
+# Chunk options
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.asp = 0.618, # Golden Ratio
+  # out.width = "80%",
+  fig.align = "center"
+)
+### Ggplot Theme
+### https://rpubs.com/mclaire19/ggplot2-custom-themes
+
+theme_custom <- function() {
+  font <- "Roboto Condensed" # assign font family up front
+
+  theme_classic(base_size = 14) %+replace% # replace elements we want to change
+
+    theme(
+      panel.grid.minor = element_blank(), # strip minor gridlines
+      text = element_text(family = font),
+      # text elements
+      plot.title = element_text( # title
+        family = font, # set font family
+        size = 16, # set font size
+        face = "bold", # bold typeface
+        hjust = 0, # left align
+        # vjust = 2                #raise slightly
+        margin = margin(0, 0, 10, 0)
+      ),
+      plot.subtitle = element_text( # subtitle
+        family = font, # font family
+        size = 14, # font size
+        hjust = 0,
+        margin = margin(2, 0, 5, 0)
+      ),
+      plot.caption = element_text( # caption
+        family = font, # font family
+        size = 8, # font size
+        hjust = 1
+      ), # right align
+
+      axis.title = element_text( # axis titles
+        family = font, # font family
+        size = 10 # font size
+      ),
+      axis.text = element_text( # axis text
+        family = font, # axis family
+        size = 8
+      ) # font size
+    )
+}
+
+# Set graph theme
+theme_set(new = theme_custom())
+#
+```
+
+```{r}
+#Reading data
+gifts_age <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-02-13/gifts_age.csv")
+glimpse(gifts_age)
+```
+
+## 2.Introduction
+
+This is an analysis of Valentine's Day spending across various gift categories, broken down by different age groups. The aim is to explore patterns in spending for gifts such as candy, flowers, jewelry, and greeting cards, and how they differ by age.
+
+## 3.Data Dictionary
+
+-   **Quantitative Variables:**
+
+    -   Age: Age groups of individuals (18-24, 25-34, 35-44, 45-54, 55-64, 65+)
+
+    -   Candy: Amount spent on candy
+
+    -   Flowers: Amount spent on flowers
+
+    -   Jewellery: Amount spent on jewelry
+
+    -   GiftCards: Amount spent on gift cards
+
+    -   Clothings: Amount spent on clothing
+
+    -   Greeting Cards: Amount spent on greeting cards
+
+    -   EveningOuts: Amount spent on an evening out
+
+    -   SpendingCelebrating: Total amount spent on celebrating Valentine’s Day
+
+-   **Qualitative Variables:**
+
+    -   None
+
+    ## 4.Target and Predictor Variable
+
+    -   Target Variable: Spending amounts across different categories
+
+    -   Predictor Variable: Age group of the participants
+
+## 5. Research Experiment
+
+The dataset was likely collected through surveys or sales reports that categorized purchases based on age groups.
+
+## 6.Research Questions
+
+-   How does spending on various gift categories change across different age groups?
+
+-   Which age group spends the most on specific categories like candy, jewelry, or evening outings?
+
+-   Are there notable differences in spending trends for items typically associated with Valentine's Day (e.g., flowers, greeting cards)?
+
+### 7.Data Preprocessing
+
+```{r}
+gifts_age_long <- gifts_age %>%
+  pivot_longer(cols = -Age, names_to = "Item", values_to = "AmountSpent") %>%
+  mutate(Age = factor(Age, levels = c("18-24", "25-34", "35-44", "45-54", "55-64", "65+")),
+         Item = factor(Item, levels = c("Candy", "Clothing", "EveningOut", "Flowers", 
+                                        "GiftCards", "GreetingCards", "Jewelry", "SpendingCelebrating")))
+
+```
+
+```{r}
+ggplot(gifts_age_long, aes(x = Age, y = AmountSpent, color = Item, shape = Item)) +
+  geom_line(aes(group = Item), size = 1) +
+  geom_point(size = 3) +
+  scale_shape_manual(values = c(0, 1, 2, 3, 4, 5, 6, 7)) +  # Different shapes for each item
+  labs(title = "Valentine's Day Spending Across Age Groups",
+       subtitle = "Amounts spent per gift category",
+       x = "Age Group in Years",
+       y = "Amount Spent (in $)",
+       caption = "Data Source: Tidy Tuesday 13-Feb-2024") +
+  theme_prism(axis_text_angle = 45) +  # Customizing axis with ggprism
+  theme(legend.title = element_text(size = 12), 
+        legend.text = element_text(size = 10),
+        plot.title = element_text(face = "bold", size = 16),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12)) +
+  scale_color_prism()  # Using ggprism color palette
+
+```
+
+## 8.Inference and Storytelling
+
+-   Candy and Flowers: The 25-34 age group tends to spend the most on candy and flowers, possibly as they are within the prime age of gift-giving.
+
+-   Jewelry: Spending on jewelry is highest in the 35-44 age group, which may be associated with more stable financial standing.
+
+-   Greeting Cards and Gift Cards: Greeting cards and gift cards are more evenly distributed across age groups, with only slight peaks in specific age ranges.
+
+-   Evening Out: Spending on evenings out peaks in the 25-34 and 35-44 age groups, showing a preference for experiences over material gifts during these years.
+
+## 9. Conclusion
+
+This analysis sheds light on the different spending patterns for Valentine's Day gifts across age groups. While younger individuals (18-24) may spend more on smaller, less expensive items like candy, older age groups tend to invest in higher-value gifts like jewelry or an evening out. Understanding these trends can help marketers and retailers target their promotions more effectively during the Valentine's Day season.

@@ -1,0 +1,124 @@
+---
+title: "Dataset 2 Analysis"
+author: "Prathishta"
+date: "2024-10-17"
+description: "Hearing Loss in Children"
+---
+
+## Analysis of Hearing test for Children with OME disease.
+
+## 1. Setting up R Packages
+
+Installing and loading necessary packages.
+
+```{r}
+library(tidyverse)
+library(mosaic)
+library(skimr)
+library(ggformula)
+```
+
+## 2. Introduction
+
+This study investigates the long-term effects of childhood Otitis Media with Effusion (OME) on auditory processing abilities in children.
+
+```{r}
+## reading data
+ome <- read_csv("https://vincentarelbundock.github.io/Rdatasets/csv/MASS/OME.csv")
+glimpse(ome)
+```
+
+## 3.Defining Variables and Data Dictionary
+
+Variables:
+
+-   ID: Participant identifier (factor)
+
+-   Age: Age of participant (factor)
+
+-   OME: Incidence of OME Disease over Childhood (ordinal factor: low, high, NA)
+
+-   Loud: Volume level of the test signal (factor)
+
+-   Noise: Type of test signal (factor: "Test Signal is Noise-like", "Test Signal is Distinct")
+
+-   Correct: Number of correct responses
+
+-   Trials: Number of trials conducted
+
+-   success_rate: Calculated as Correct / Trials
+
+## 4.Target and Predictor Variables
+
+-   Define Target and Predictor variables: Target Variable: success_rate Predictor Variables: OME, Noise
+
+## 5.Research experiment
+
+-   This study likely involved testing children with varying histories of Otitis Media with Effusion (OME) using a hearing test. The children were provided with different types of test signals at various volume levels. They were asked to orient themselves towards the loudspeaker playing the test signal. The experiment measured their success rate in detecting the signal across multiple trials.
+
+    ## 7. Research Questions
+
+    1)How does the incidence of OME in childhood affect hearing test performance?
+
+    2)Does the type of test signal (noise-like vs. distinct) impact detection success?
+
+    3)Is there an interaction between OME history and test signal type on hearing test performance?
+
+## 8.Preprocessing and Visualisation:
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+
+# Data preprocessing
+ome_processed <- ome %>%
+  # Converting variables to factors
+  mutate(ID = factor(ID),
+         Age = factor(Age),
+         OME = factor(OME, levels = c("low", "medium", "high"), ordered = TRUE),
+         Noise = factor(Noise)) %>%
+  # Calculating success rate
+  mutate(success_rate = Correct / Trials)
+
+# View preprocessed data
+head(ome_processed)
+
+
+
+```
+
+```{r}
+# Plot the data
+ggplot(ome_processed, aes(x = OME, y = success_rate)) +
+  geom_boxplot() +
+  facet_wrap(~ Noise, scales = "free_x") +  # Separate plots for each Noise condition
+  geom_hline(yintercept = 0.75, linetype = "dashed") +  # Adding a horizontal line at 0.75
+  labs(title = "Hearing Test for Children with Otitis Media with Effusion (OME) Disease",
+       subtitle = "Test = Detection of Test Signal in Noise\nPassing Score = 0.75",
+       x = "Incidence of OME Disease over Childhood",
+       y = "Successful Detection Score\n(over multiple trials)") +
+  theme_minimal()
+
+```
+
+### **Inference and Storytelling for OME Data**
+
+#### **Effect of OME on Success Rate:**
+
+-   The analysis reveals a noticeable difference in the success rate of children with varying levels of OME. Children with low OME incidence tend to achieve higher success rates in detecting test signals compared to those with moderate or high OME.
+
+-   The success rate appears to decrease as the severeity of OME increases, indicating that children with higher OME levels may struggle more with auditory processing tasks.
+
+#### **Impact of Noise Type:**
+
+-   The type of test signal noise also plays a significant role in influencing the success rate. Children perform better when exposed to coherent rather than incoherent noise, suggesting that more structured auditory signals facilitate better performance.
+
+-   The success rate remains consistently lower under incoherent noise, highlighting the challenge it presents to children with varying OME levels.
+
+#### **Age Considerations:**
+
+-   Although age is not explicitly analyzed in this context, the general trend suggests that older children might demonstrate better adaptation to auditory tasks, potentially mitigating the effects of OME. Further investigation could validate this hypothesis.
+
+    These findings indicate that the severity of OME significantly affects children ability to detect test signals in noise, suggesting that children with higher OME levels face greater challenges in auditory processing. The clear distinction in success rates based on the type of noise underscores the importance of auditory clarity in educational and clinical settings.

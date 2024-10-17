@@ -1,0 +1,23 @@
+---
+title: "Welcome To My Blog"
+author: "Prathishta"
+date: "2024-10-17"
+---
+
+## INTRO
+
+This is the first post in a Quarto blog. Welcome! Actually second but hopefully this one is a working model :)
+
+Reworking on my A1 and working on my A2
+
+![Sadly cats do not grade me so humans are welcome too :)](images/another%20cat.jpg)
+
+
+
+-   **A1 Folder**:
+    -   [Counts](A1/counts.html)  
+    -   [Code Replication](A1/code-replication.html)  
+-   **A2 Folder**:
+    -   [Dataset 1](A2/Dataset1.html)  
+    -   [Dataset 2](A2/Dataset2.html)  
+    -   [Dataset 3](A2/Dataset3.html)  
